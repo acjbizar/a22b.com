@@ -1,0 +1,22 @@
+{
+  "background_color": "#a00ade",
+  "categories": ["person", "portfolio", "art", "projects"],
+  "description": "A guy that does things, and thinks that having a reason for doing so is largely overrated.",
+  "dir": "ltr",
+  "display": "minimal-ui",
+  "icons": [
+    {
+      "src": "https://alexanderchristiaanjacob.com/apple-touch-icon.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "https://alexanderchristiaanjacob.com/favicon.ico",
+      "sizes": "16x16 32x32 64x64"
+    }
+  ],
+  "lang": "en",
+  "name": "Alexander Christiaan Jacob",
+  "short_name": "ACJ",
+  "start_url": "https://alexanderchristiaanjacob.com/"
+}
