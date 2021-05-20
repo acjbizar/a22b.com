@@ -1,0 +1,23 @@
+{
+  "name": "a22b.com",
+  "version": "1.0.0",
+  "description": "My homepage, I guess.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acjbizar/a22b.com.git"
+  },
+  "author": "ACJ",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/acjbizar/a22b.com/issues"
+  },
+  "homepage": "https://github.com/acjbizar/a22b.com#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sass": "^4.1.0"
+  }
+}
