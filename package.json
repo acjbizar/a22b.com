@@ -1,6 +1,6 @@
 {
-  "name": "a22b.com",
-  "version": "1.0.0",
+  "name": "@acj/a22b.com",
+  "version": "1.0.1",
   "description": "My homepage, I guess.",
   "main": "index.js",
   "scripts": {

@@ -6,8 +6,10 @@ My homepage, I guess.
 
 Previously, various (sub)domains had their own private repositories:
 
-* git@gitlab.com:acj/alexanderchristiaanjacob.com.git
-* git@gitlab.com:acj/help.alexanderchristiaanjacob.com.git
-* git@gitlab.com:acj/kill.alexanderchristiaanjacob.com.git
-* git@gitlab.com:acj/support.alexanderchristiaanjacob.com.git
-* I have no idea where the repository for contact.alexanderchristiaanjacob.com is (lolwut?)
+| Domain | Repository |
+| --- | --- |
+| alexanderchristiaanjacob.com | `git@gitlab.com:acj/alexanderchristiaanjacob.com.git` |
+| help.alexanderchristiaanjacob.com | `git@gitlab.com:acj/help.alexanderchristiaanjacob.com.git` |
+| kill.alexanderchristiaanjacob.com | `git@gitlab.com:acj/kill.alexanderchristiaanjacob.com.git` |
+| support.alexanderchristiaanjacob.com | `git@gitlab.com:acj/support.alexanderchristiaanjacob.com.git` |
+| contact.alexanderchristiaanjacob.com | I have no idea where the repository for `contact.alexanderchristiaanjacob.com` is (lolwut?) |
