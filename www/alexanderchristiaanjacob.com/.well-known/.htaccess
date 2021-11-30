@@ -3,7 +3,7 @@ Order allow,deny
 Allow from all
 
 RewriteCond %{REQUEST_URI} ^/[.]well-known/acme-challenge/[a-zA-Z0-9_-]+$ [OR]
-RewriteCond %{REQUEST_URI} ^/[.]well-known/brave-rewards-verification\.txt$
+RewriteCond %{REQUEST_URI} ^/[.]well-known/brave-rewards-verification\.txt$ [OR]
 RewriteCond %{REQUEST_URI} ^/[.]well-known/security\.txt$
 RewriteRule .* - [L]
 
