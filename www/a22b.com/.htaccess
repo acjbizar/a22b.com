@@ -36,8 +36,4 @@ AddType text/x-component .htc
 
 Options -Indexes +MultiViews
 
-Redirect / http://alexanderchristiaanjacob.com/
-
-
-
-DirectoryIndex index.php , index.html , index.htm
+Redirect / https://alexanderchristiaanjacob.com/
