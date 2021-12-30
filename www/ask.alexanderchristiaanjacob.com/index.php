@@ -40,12 +40,6 @@ endswitch;
 // Main classes, inherited by other classes.
 abstract class aThing
 {
-    // ACJ 3-10-2012
-    public function __destruct()
-    {
-        unset($this);
-    }
-
     // ACJ 2-10-2012
     // Return false when property is not set.
     public function __get($key)
@@ -240,7 +234,7 @@ function status($code = 200)
     $statuses = array(
         200 => 'OK',
         201 => 'Created',
-        201 => 'Accepted',
+        202 => 'Accepted',
         203 => 'Non-Authoritative Information',
         301 => 'Moved Permanently',
         302 => 'Found',
