@@ -1,0 +1,43 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+</IfModule>
+
+AddDefaultCharSet On
+AddDefaultCharSet UTF-8
+
+AddLanguage .en en
+AddLanguage .nl nl
+
+AddType application/atom+xml .atom
+AddType application/mathml+xml .mml
+AddType application/octet-stream .exe .fla .mp3 .mp4 .mpeg .mpg
+AddType application/ogg .ogg
+AddType application/opensearchdescription+xml .osd
+AddType application/rdf+xml .foaf .rdf .xrdf
+AddType application/x-indesign .indd
+AddType application/x-httpd-php .acj .asp .php .php3 .php4 .php5
+AddType application/x-httpd-php-source .phps
+AddType application/x-shockwave-flash .swf
+AddType application/xhtml+xml .xhb .xht .xhtml
+AddType application/xml .xml
+AddType image/gif .gif
+AddType image/jpeg .jpeg .jpg
+AddType image/png .png
+AddType image/svg+xml .svg
+AddType image/x-eps .eps
+AddType text/css .css
+AddType text/html .chtml .htm .html .html4 .html5 .wa1
+AddType text/javascript .js
+AddType text/plain .class .py .txt
+AddType text/x-component .htc
+
+#DirectoryIndex home index all.css
+
+Options -Indexes +MultiViews
+
+Redirect / http://alexanderchristiaanjacob.com/
+
+
+
+DirectoryIndex index.php , index.html , index.htm
