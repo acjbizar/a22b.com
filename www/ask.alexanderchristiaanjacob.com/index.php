@@ -2,13 +2,15 @@
 
 // ACJ 1-5-2013
 define('AUTHOR', 'Alexander Christiaan Jacob');
-define('BASE', is_local() ? 'http://localhost/ask.alexanderchristiaanjacob.com/' : 'http://ask.alexanderchristiaanjacob.com/');
+define('BASE', is_local() ? 'http://localhost/acjbizar/a22b/ask.alexanderchristiaanjacob.com/' : 'https://ask.alexanderchristiaanjacob.com/');
 
 // ACJ 1-5-2013
 // Request methods.
 if(!defined('GET')) define('GET', 'get');
 if(!defined('POST')) define('POST', 'post');
 if(!defined('METHOD')) define('METHOD', isset($_SERVER['REQUEST_METHOD']) ? strtolower($_SERVER['REQUEST_METHOD']) : GET);
+
+$config = parse_ini_file(dirname(__DIR__) . '/config.ini');
 
 switch(METHOD):
 case GET:
@@ -23,7 +25,7 @@ case POST:
 
     if(isset($_POST['question']))
     {
-        $db = new mysqli('db.acjs.net', 'acjbizar', '4ppelflap', 'acjs');
+        $db = new mysqli($config['database_host'], $config['database_username'], $config['database_password'], 'acjs');
         $db->query('SET NAMES \'utf8\';');
         $q = 'INSERT INTO `qa` (`asked`, `q`) VALUES (' . time() . ', \'' . $db->real_escape_string($_POST['question']) . '\');';
         $r = $db->query($q) or die($db->error);
@@ -151,7 +153,7 @@ class Page extends aThing
         $r .= '</head>';
         $r .= '<body>';
         $r .= '<header>';
-        $r .= '<h1>Ask <a href="http://alexanderchristiaanjacob.com/">' . AUTHOR . '</a></h1>';
+        $r .= '<h1>Ask <a href="https://alexanderchristiaanjacob.com/">' . AUTHOR . '</a></h1>';
         $r .= '</header>';
         $r .= $this->body;
         $r .= '</body>';
@@ -204,7 +206,9 @@ JS;
 // ACJ 1-5-2013
 function build_qna()
 {
-    $db = new mysqli('db.acjs.net', 'acjbizar', '4ppelflap', 'acjs');
+    global $config;
+
+    $db = new mysqli($config['database_host'], $config['database_username'], $config['database_password'], 'acjs');
     $db->query('SET NAMES \'utf8\';');
     $q = 'SELECT * FROM `qa` WHERE `deleted` IS NULL ORDER BY `id` DESC;';
     $rows = $db->query($q) or die($db->error);
