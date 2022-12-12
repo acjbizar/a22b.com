@@ -23,6 +23,7 @@
     "gulp-data": "*",
     "gulp-sass": "*",
     "gulp-twig": "*",
+    "gulp-yaml": "^2.0.4",
     "sass": "*"
   }
 }

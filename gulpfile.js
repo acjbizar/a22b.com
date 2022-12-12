@@ -5,6 +5,7 @@ const gulp = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
 const twig = require('gulp-twig');
 const data = require('gulp-data');
+const yaml = require('gulp-yaml');
 const fs = require('fs');
 
 gulp.task('style', function () {

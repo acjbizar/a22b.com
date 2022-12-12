@@ -1,6 +1,11 @@
 {% extends '../base.html.twig' %}
 
 {% block body %}
+    <ul>
+        {%- for link in art %}
+            <li>{% include '../_link.html.twig' with link %}</li>
+        {% endfor -%}
+    </ul>
     <h1>
         {%- for char in title|split('') %}
             {% include '../_x5.html.twig' with {'char': char} %}
