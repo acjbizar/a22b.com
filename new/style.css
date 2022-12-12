@@ -1,16 +1,88 @@
+@charset "UTF-8";
+/*
+Ratios:
+
+AA text
+4.5:1
+https://www.w3.org/TR/WCAG21/#contrast-minimum
+
+AA large text
+3:1
+https://www.w3.org/TR/WCAG21/#contrast-minimum
+
+AA non-text
+3:1
+https://www.w3.org/TR/WCAG21/#non-text-contrast
+
+AAA text
+7:1
+https://www.w3.org/TR/WCAG21/#contrast-enhanced
+
+AAA large text
+4.5:1
+https://www.w3.org/TR/WCAG21/#contrast-enhanced
+
+incidental
+1:1 (no contrast; ergo, invisible)
+https://www.w3.org/TR/WCAG21/#contrast-minimum
+
+logotype
+1:1 (no contrast; ergo, invisible)
+https://www.w3.org/TR/WCAG21/#contrast-minimum
+
+Large text is defined as 14 point (typically 18.66px) and bold or larger, or 18 point (typically 24px) or larger.
+ */
+/*
+Use these techniques judiciously! Keep in mind that many screen reader users have some vision—what they see and what they hear should typically be in harmony. In general, screen reader-only content should be reserved for information is apparent visually but not apparent to blind screen reader users.
+*/
 *,
 *::after,
 *::before {
   border: 0;
+  list-style: none;
   margin: 0;
   outline: 0;
   padding: 0;
+  text-decoration: none;
 }
 
-h1 {
+html {
+  font: normal 100%/1.5 sans-serif, serif;
+}
+
+.logotype {
+  bottom: 0;
   display: flex;
   flex-wrap: wrap;
+  height: 100%;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
 }
-h1 img {
+.logotype img {
   vertical-align: bottom;
+}
+
+main {
+  position: relative;
+}
+
+.arts,
+.crafts {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0.125rem;
+}
+.arts li,
+.crafts li {
+  display: block;
+  margin: 0.125rem;
+}
+.arts a,
+.crafts a {
+  background-color: rgba(0, 0, 0, 0.875);
+  color: #fff;
+  display: block;
+  padding: 0.125rem 0.25rem;
 }

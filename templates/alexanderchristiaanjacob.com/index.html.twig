@@ -1,19 +1,21 @@
 {% extends '../base.html.twig' %}
 
 {% block body %}
-    <ul>
-        {%- for link in projects %}
-            <li>{% include '../_link.html.twig' with link %}</li>
-        {% endfor -%}
-    </ul>
-    <ul>
-        {%- for link in art %}
-            <li>{% include '../_link.html.twig' with link %}</li>
-        {% endfor -%}
-    </ul>
-    <h1>
+    <h1 class="logotype">
         {%- for char in title|split('') %}
             {% include '../_x5.html.twig' with {'char': char} %}
         {% endfor -%}
     </h1>
+    <main>
+        <ul class="arts">
+            {%- for link in art %}
+                <li>{% include '../_link.html.twig' with link %}</li>
+            {% endfor -%}
+        </ul>
+        <ul class="crafts">
+            {%- for link in projects %}
+                <li>{% include '../_link.html.twig' with link %}</li>
+            {% endfor -%}
+        </ul>
+    </main>
 {% endblock %}
