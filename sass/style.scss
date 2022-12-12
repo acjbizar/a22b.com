@@ -1,6 +1,11 @@
 
 @import "@deidee/desass/src/sass/style";
 
+:root {
+  --ddpx: 1;
+  --dp: 1px;
+}
+
 *,
 *::after,
 *::before {
@@ -17,6 +22,7 @@ html {
 }
 
 .logotype {
+  align-content: start;
   bottom: 0;
   display: flex;
   flex-wrap: wrap;
@@ -27,7 +33,9 @@ html {
   width: 100%;
 
   img {
+    height: auto;
     vertical-align: bottom;
+    width: calc(208px / var(--ddpx));
   }
 }
 
@@ -51,6 +59,11 @@ main {
     color: #fff;
     display: block;
     padding: rem(2) rem(4);
+
+    &:hover {
+      background-color: #fff;
+      color: #000;
+    }
   }
 }
 

@@ -22,5 +22,14 @@
 {% endblock %}
 {% block footer %}
 {% endblock %}
+<script>
+    "use strict";
+
+    const html = document.documentElement;
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    html.style.setProperty("--dppx", devicePixelRatio.toString());
+    html.style.setProperty("--dp", 1 / devicePixelRatio + 'px');
+    console.log(devicePixelRatio);
+</script>
 </body>
 </html>
