@@ -1,7 +1,9 @@
 {% extends '../base.html.twig' %}
 
 {% block body %}
-    {% for char in title|upper|split('') %}
-        {% include '../_x5.html.twig' with {'char': char} %}
-    {% endfor %}
+    <h1>
+        {%- for char in title|split('') %}
+            {% include '../_x5.html.twig' with {'char': char} %}
+        {% endfor -%}
+    </h1>
 {% endblock %}

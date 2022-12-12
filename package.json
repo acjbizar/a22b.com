@@ -17,10 +17,12 @@
   },
   "homepage": "https://github.com/acjbizar/a22b.com#readme",
   "devDependencies": {
-    "gulp": "^4.0.2",
-    "gulp-data": "^1.3.1",
-    "gulp-sass": "^4.1.0",
-    "gulp-twig": "^1.2.0",
-    "sass": "^1.56.1"
+    "@deidee/desass": "*",
+    "@deidee/hetpalet": "*",
+    "gulp": "*",
+    "gulp-data": "*",
+    "gulp-sass": "*",
+    "gulp-twig": "*",
+    "sass": "*"
   }
 }
