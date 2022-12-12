@@ -2,6 +2,11 @@
 
 {% block body %}
     <ul>
+        {%- for link in projects %}
+            <li>{% include '../_link.html.twig' with link %}</li>
+        {% endfor -%}
+    </ul>
+    <ul>
         {%- for link in art %}
             <li>{% include '../_link.html.twig' with link %}</li>
         {% endfor -%}
