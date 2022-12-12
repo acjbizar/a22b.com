@@ -11,7 +11,7 @@ const fs = require('fs');
 gulp.task('style', function () {
     return gulp.src('./sass/**/*.scss')
         .pipe(sass({includePaths: ['node_modules'], outputStyle: 'expanded'}))
-        .pipe(gulp.dest('./www'));
+        .pipe(gulp.dest('./new'));
 });
 
 // Compile Twig templates to HTML
@@ -32,7 +32,7 @@ gulp.task('templates', function() {
                 }
             ]
         }))
-        .pipe(gulp.dest('./www')); // output the rendered files to the "dist" directory
+        .pipe(gulp.dest('./new')); // output the rendered files to the "dist" directory
 });
 
 gulp.task('default', gulp.series('style', 'templates'));
