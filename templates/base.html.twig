@@ -2,9 +2,23 @@
 <html dir="ltr" lang="en">
 <head>
     <meta charset="utf-8">
-    <title></title>
+    {#- https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html ~#}
+    <meta name="format-detection" content="address=no">
+    <meta name="format-detection" content="date=no">
+    <meta name="format-detection" content="email=no">
+    <meta name="format-detection" content="telephone=no">
+    {#- https://developers.google.com/search/reference/robots_meta_tag ~#}
+    <meta name="robots" content="{% block robots %}noarchive{% endblock %}">
+    {#- https://developer.mozilla.org/en-US/docs/Mozilla/Mobile/Viewport_meta_tag ~#}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
 </head>
 <body id="top">
-
+{% block header %}
+{% endblock %}
+{% block body %}
+{% endblock %}
+{% block footer %}
+{% endblock %}
 </body>
 </html>
