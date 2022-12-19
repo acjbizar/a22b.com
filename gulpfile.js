@@ -16,7 +16,7 @@ gulp.task('style', function () {
 
 // Compile Twig templates to HTML
 gulp.task('templates', function() {
-    return gulp.src(['./templates/**/*.twig', '!templates/_*.twig', '!templates/base.html.twig'], { dot: true })
+    return gulp.src(['./templates/**/*.twig', '!templates/**/_*.twig', '!templates/base.html.twig'], { dot: true })
         .pipe(data(function(file) {
             return JSON.parse(fs.readFileSync('./data/set.json'));
         }))

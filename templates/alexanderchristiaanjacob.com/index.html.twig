@@ -6,7 +6,8 @@
             {% include '../_x5.html.twig' with {'char': char} %}
         {% endfor -%}
     </h1>
-    <main>
+    <main id="content">
+        <p class="introduction">{% include '_introduction.html.twig' %}</p>
         <ul class="arts">
             {%- for link in art %}
                 <li>{% include '../_link.html.twig' with link %}</li>
@@ -17,5 +18,8 @@
                 <li>{% include '../_link.html.twig' with link %}</li>
             {% endfor -%}
         </ul>
+        <aside>
+            <p>Feel free to follow me, contact me, and support me. You can also fine more of my stuff at {% include '../_link.html.twig' with links.acjs %}.</p>
+        </aside>
     </main>
 {% endblock %}
