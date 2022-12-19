@@ -8,16 +8,22 @@
     </h1>
     <main id="content">
         <p class="introduction">{% include '_introduction.html.twig' %}</p>
-        <ul class="arts">
-            {%- for link in art %}
-                <li>{% include '../_link.html.twig' with link %}</li>
-            {% endfor -%}
-        </ul>
-        <ul class="crafts">
-            {%- for link in projects %}
-                <li>{% include '../_link.html.twig' with link %}</li>
-            {% endfor -%}
-        </ul>
+        <section>
+            <h2>Art</h2>
+            <ul class="arts">
+                {%- for link in art %}
+                    <li>{% include '../_link.html.twig' with link %}</li>
+                {% endfor -%}
+            </ul>
+        </section>
+        <section>
+            <h2>Projects</h2>
+            <ul class="crafts">
+                {%- for link in projects %}
+                    <li>{% include '../_link.html.twig' with link %}</li>
+                {% endfor -%}
+            </ul>
+        </section>
         <aside>
             <p>Feel free to follow me, contact me, and support me. You can also fine more of my stuff at {% include '../_link.html.twig' with links.acjs %}.</p>
         </aside>
