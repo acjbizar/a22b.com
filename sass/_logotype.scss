@@ -1,0 +1,18 @@
+
+.logotype {
+  align-content: start;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+
+  img {
+    height: auto;
+    vertical-align: bottom;
+    width: calc(208px / var(--ddpx));
+  }
+}

@@ -65,6 +65,48 @@ label:nth-child(3) {
   background: red;
 }
 
+.logotype {
+  align-content: start;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+}
+.logotype img {
+  height: auto;
+  vertical-align: bottom;
+  width: calc(208px / var(--ddpx));
+}
+
+section {
+  background: rgba(255, 255, 255, 0.875);
+  max-width: 32rem;
+}
+section h2 {
+  transform: rotate(90deg);
+  transform-origin: left;
+}
+section ul {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0.125rem;
+}
+section ul li {
+  display: block;
+  margin: 0.125rem;
+}
+section ul a {
+  display: block;
+}
+section ul a:hover {
+  background-color: #fff;
+  color: #000;
+}
+
 :root {
   --ddpx: 1;
   --dp: 1px;
@@ -86,47 +128,8 @@ html {
   font: normal 100%/1.5 sans-serif, serif;
 }
 
-.logotype {
-  align-content: start;
-  bottom: 0;
-  display: flex;
-  flex-wrap: wrap;
-  height: 100%;
-  left: 0;
-  overflow: hidden;
-  position: absolute;
-  width: 100%;
-}
-.logotype img {
-  height: auto;
-  vertical-align: bottom;
-  width: calc(208px / var(--ddpx));
-}
-
 main {
+  margin: auto;
+  max-width: 50%;
   position: relative;
-}
-
-.arts,
-.crafts {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0.125rem;
-}
-.arts li,
-.crafts li {
-  display: block;
-  margin: 0.125rem;
-}
-.arts a,
-.crafts a {
-  background-color: rgba(0, 0, 0, 0.875);
-  color: #fff;
-  display: block;
-  padding: 0.125rem 0.375rem;
-}
-.arts a:hover,
-.crafts a:hover {
-  background-color: #fff;
-  color: #000;
 }

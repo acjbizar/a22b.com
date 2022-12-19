@@ -1,0 +1,33 @@
+
+section {
+  background: transparentize(white, .125);
+  max-width: 32rem;
+
+  h2 {
+    transform: rotate(90deg);
+    transform-origin: left;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    margin: rem(2);
+
+    li {
+      display: block;
+      margin: rem(2);
+    }
+
+    a {
+      //background-color: transparentize(#000, .125);
+      //color: #fff;
+      display: block;
+      //padding: rem(2) rem(6);
+
+      &:hover {
+        background-color: #fff;
+        color: #000;
+      }
+    }
+  }
+}
