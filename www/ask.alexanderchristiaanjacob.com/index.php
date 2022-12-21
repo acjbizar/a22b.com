@@ -12,32 +12,6 @@ if(!defined('METHOD')) define('METHOD', isset($_SERVER['REQUEST_METHOD']) ? strt
 
 $config = parse_ini_file(dirname(__DIR__) . '/config.ini');
 
-switch(METHOD):
-case GET:
-
-    $p = new Page;
-    $p->body .= build_form();
-    $p->body .= build_qna();
-    $p->parse();
-
-break;
-case POST:
-
-    if(isset($_POST['question']))
-    {
-        $db = new mysqli($config['database_host'], $config['database_username'], $config['database_password'], 'acjs');
-        $db->query('SET NAMES \'utf8\';');
-        $q = 'INSERT INTO `qa` (`asked`, `q`) VALUES (' . time() . ', \'' . $db->real_escape_string($_POST['question']) . '\');';
-        $r = $db->query($q) or die($db->error);
-    }
-
-    unset($_POST);
-    header('Location: ' . BASE);
-    exit;
-
-break;
-endswitch;
-
 // ACJ 2-10-2012
 // Main classes, inherited by other classes.
 abstract class aThing
@@ -172,6 +146,32 @@ class Page extends aThing
         echo $this;
     }
 }
+
+switch(METHOD):
+case GET:
+
+    $p = new Page;
+    $p->body .= build_form();
+    $p->body .= build_qna();
+    $p->parse();
+
+break;
+case POST:
+
+    if(isset($_POST['question']))
+    {
+        $db = new mysqli($config['database_host'], $config['database_username'], $config['database_password'], 'acjs');
+        $db->query('SET NAMES \'utf8\';');
+        $q = 'INSERT INTO `qa` (`asked`, `q`) VALUES (' . time() . ', \'' . $db->real_escape_string($_POST['question']) . '\');';
+        $r = $db->query($q) or die($db->error);
+    }
+
+    unset($_POST);
+    header('Location: ' . BASE);
+    exit;
+
+break;
+endswitch;
 
 // ACJ 1-5-2013
 function build_form()
