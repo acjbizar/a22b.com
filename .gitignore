@@ -3,6 +3,9 @@
 /node_modules/
 /vendor/
 
+.env
+config.ini
+
 .yarn/*
 !.yarn/patches
 !.yarn/releases
