@@ -1,21 +1,11 @@
 ---
 layout: base.html.njk
 title: "Alexander Christiaan Jacob"
+templateEngineOverride: njk, md
 ---
 
 {% set h1 = title.split('') %}
 <h1>{%- for char in h1 %}{% include '_x5.html.njk' %}{%- endfor %}</h1>
 
-<section id="artworks">
-<h2>Artworks</h2>
-<ul>
-{% for artwork in artworks %}<li><a href="{{ artwork.url }}">{{ artwork.title }}</a></li>{% endfor %}
-</ul>
-</section>
-
-<section id="projects">
-<h2>Projects</h2>
-<ul>
-{% for project in projects %}<li><a href="{{ project.url }}">{{ project.title }}</a></li>{% endfor %}
-</ul>
-</section>
+{% include '_artworks.md' %}
+{% include '_projects.md' %}
