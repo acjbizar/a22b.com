@@ -1,5 +1,84 @@
+@charset "UTF-8";
+/*
+Ratios:
+
+AA text
+4.5:1
+https://www.w3.org/TR/WCAG21/#contrast-minimum
+
+AA large text
+3:1
+https://www.w3.org/TR/WCAG21/#contrast-minimum
+
+AA non-text
+3:1
+https://www.w3.org/TR/WCAG21/#non-text-contrast
+
+AAA text
+7:1
+https://www.w3.org/TR/WCAG21/#contrast-enhanced
+
+AAA large text
+4.5:1
+https://www.w3.org/TR/WCAG21/#contrast-enhanced
+
+incidental
+1:1 (no contrast; ergo, invisible)
+https://www.w3.org/TR/WCAG21/#contrast-minimum
+
+logotype
+1:1 (no contrast; ergo, invisible)
+https://www.w3.org/TR/WCAG21/#contrast-minimum
+
+Large text is defined as 14 point (typically 18.66px) and bold or larger, or 18 point (typically 24px) or larger.
+ */
+/*
+Use these techniques judiciously! Keep in mind that many screen reader users have some vision—what they see and what they hear should typically be in harmony. In general, screen reader-only content should be reserved for information is apparent visually but not apparent to blind screen reader users.
+*/
+:root {
+  --ddpx: 1;
+  --dp: 1px;
+}
+
+*,
+*::after,
+*::before {
+  border: 0;
+  box-sizing: border-box;
+  list-style: none;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
 body {
   background: #f0c;
+}
+
+html {
+  font: normal 100%/1.5 sans-serif, serif;
+}
+
+main {
+  display: grid;
+  grid-auto-columns: minmax(10%, auto);
+  grid-auto-rows: minmax(1.5rem, auto);
+  grid-template-areas: "a a b b" "a a c d" "a a c d";
+}
+main > h1 {
+  grid-area: a;
+}
+main > p {
+  grid-area: b;
+}
+
+#artworks {
+  grid-area: c;
+}
+
+#projects {
+  grid-area: d;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -4,8 +4,8 @@
   "description": "My homepage, I guess.",
   "main": "index.js",
   "scripts": {
-    "watch:sass": "sass --watch src/sass:11ty",
-    "build:sass": "sass src/sass:11ty",
+    "watch:sass": "sass --load-path node_modules --watch src/sass:11ty",
+    "build:sass": "sass --load-path node_modules src/sass:11ty",
     "watch:eleventy": "eleventy --serve",
     "build:eleventy": "eleventy",
     "start": "npm-run-all build:sass --parallel watch:*",

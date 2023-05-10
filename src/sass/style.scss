@@ -1,4 +1,44 @@
 
+@import "@deidee/desass/src/sass/style";
+
+:root {
+  --ddpx: 1;
+  --dp: 1px;
+}
+
+@include reset();
+
 body {
   background: #f0c;
 }
+
+html {
+  font: normal 100%/1.5 sans-serif, serif;
+}
+
+main {
+  display: grid;
+  grid-auto-columns: minmax(10%, auto);
+  grid-auto-rows: minmax(rem(24), auto);
+  grid-template-areas:
+          "a a b b"
+          "a a c d"
+          "a a c d";
+
+  > h1 {
+    grid-area: a;
+  }
+
+  > p {
+    grid-area: b;
+  }
+}
+
+#artworks {
+  grid-area: c;
+}
+
+#projects {
+  grid-area: d;
+}
+

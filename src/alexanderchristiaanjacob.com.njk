@@ -4,8 +4,9 @@ title: "Alexander Christiaan Jacob"
 templateEngineOverride: njk, md
 ---
 
-{% set h1 = title.split('') %}
-<h1>{%- for char in h1 %}{% include '_x5.html.njk' %}{%- endfor %}</h1>
+<h1>{%- for char in title.split('') %}{% include '_x5.html.njk' %}{%- endfor %}</h1>
+
+{% include '_introduction.md' %}
 
 {% include '_artworks.md' %}
 {% include '_projects.md' %}
