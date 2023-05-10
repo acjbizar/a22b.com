@@ -2,34 +2,37 @@
 @import "@deidee/desass/src/sass/style";
 
 :root {
+  --bgcolor: #eee;
   --ddpx: 1;
   --dp: 1px;
+  --gap: #{rem(24)};
 }
 
 @include reset();
 
-body {
-  background: #f0c;
-}
-
 html {
+  background-color: var(--bgcolor);
   font: normal 100%/1.5 sans-serif, serif;
 }
 
 main {
   display: grid;
+  gap: var(--gap);
   grid-auto-columns: minmax(10%, auto);
-  grid-auto-rows: minmax(rem(24), auto);
+  grid-auto-rows: fit-content(#{rem(24)});
+  grid-auto-flow: row dense;
   grid-template-areas:
           "a a b b"
           "a a c d"
           "a a c d";
+  padding: rem(24);
 
   > h1 {
     grid-area: a;
   }
 
   > p {
+    font-size: 2rem;
     grid-area: b;
   }
 }

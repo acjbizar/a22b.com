@@ -36,8 +36,10 @@ Large text is defined as 14 point (typically 18.66px) and bold or larger, or 18 
 Use these techniques judiciously! Keep in mind that many screen reader users have some vision—what they see and what they hear should typically be in harmony. In general, screen reader-only content should be reserved for information is apparent visually but not apparent to blind screen reader users.
 */
 :root {
+  --bgcolor: #eee;
   --ddpx: 1;
   --dp: 1px;
+  --gap: 1.5rem;
 }
 
 *,
@@ -52,24 +54,25 @@ Use these techniques judiciously! Keep in mind that many screen reader users hav
   text-decoration: none;
 }
 
-body {
-  background: #f0c;
-}
-
 html {
+  background-color: var(--bgcolor);
   font: normal 100%/1.5 sans-serif, serif;
 }
 
 main {
   display: grid;
+  gap: var(--gap);
   grid-auto-columns: minmax(10%, auto);
-  grid-auto-rows: minmax(1.5rem, auto);
+  grid-auto-rows: fit-content(1.5rem);
+  grid-auto-flow: row dense;
   grid-template-areas: "a a b b" "a a c d" "a a c d";
+  padding: 1.5rem;
 }
 main > h1 {
   grid-area: a;
 }
 main > p {
+  font-size: 2rem;
   grid-area: b;
 }
 
