@@ -1,10 +1,15 @@
 {
   "name": "@acj/a22b.com",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "My homepage, I guess.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch:sass": "sass --watch src/sass:11ty",
+    "build:sass": "sass src/sass:11ty",
+    "watch:eleventy": "eleventy --serve",
+    "build:eleventy": "eleventy",
+    "start": "npm-run-all build:sass --parallel watch:*",
+    "build": "npm-run-all build:*"
   },
   "repository": {
     "type": "git",
@@ -17,6 +22,7 @@
   },
   "homepage": "https://github.com/acjbizar/a22b.com#readme",
   "devDependencies": {
+    "@11ty/eleventy": "^2.0.1",
     "@deidee/desass": "*",
     "@deidee/hetpalet": "*",
     "gulp": "*",
@@ -24,6 +30,7 @@
     "gulp-sass": "*",
     "gulp-twig": "*",
     "gulp-yaml": "^2.0.4",
+    "npm-run-all": "^4.1.5",
     "sass": "*"
   }
 }
