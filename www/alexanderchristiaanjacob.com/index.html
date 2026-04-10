@@ -147,48 +147,6 @@
         ga('create', 'UA-36264471-3', 'auto');
         ga('send', 'pageview');
 
-        window.onload = function(){
-            var xn61hs = {0 : "◐", 1 : "◓", 2 : "◑", 3 : "◒"};
-            var xnb3hs = {0 : "◷", 1 : "◶", 2 : "◵", 3 : "◴"};
-            var xn61h = document.getElementsByClassName("xn--61h");
-            var xnb3h = document.getElementsByClassName("xn--b3h");
-            var i = 0;
-            var j = 0;
-            var x = 0;
-
-            function changeLabels(){
-                setTimeout(function(){
-                    if(xn61h.length) {
-                        xn61h[x].innerHTML = xn61hs[i];
-
-                        if(xnb3hs[i + 1] !== undefined){
-                            ++i;
-                        }
-                        else
-                        {
-                            i = 0;
-                        }
-                    }
-
-                    if(xnb3h.length) {
-                        xnb3h[x].innerHTML = xnb3hs[j];
-
-                        if(xnb3hs[j + 1] !== undefined){
-                            ++j;
-                        }
-                        else
-                        {
-                            j = 0;
-                        }
-                    }
-
-                    changeLabels();
-                },1000);
-            }
-
-            //changeLabels();
-        }
-
     </script>
 </head>
 <body id=top>
@@ -235,6 +193,7 @@
         <a href=https://gaydients.com/ itemprop=owns itemscope itemtype=http://schema.org/VisualArtwork>Gaydients</a>,
         <a href=https://hyperhyper.link/ itemprop=owns itemscope itemtype=http://schema.org/VisualArtwork>Hyper Hyper Link</a>,
         <a href=https://zufarben.de/ itemprop=owns itemscope itemtype=http://schema.org/VisualArtwork lang=de translate=no>Zufärben</a>,
+        <a href=https://f00.red/ itemprop=owns itemscope itemtype=http://schema.org/VisualArtwork>This Is Not Hope For Minimal Abstract Art Part 1</a>,
         <a href=https://noisegradients.com/ itemprop=owns itemscope itemtype=http://schema.org/VisualArtwork>Noise Gradients</a>,
         <a href=https://graydients.com/ itemprop=owns itemscope itemtype=http://schema.org/VisualArtwork translate=no>Graydients</a>,
         <a href=https://everythingisuntrue.com/ itemprop=owns itemscope itemtype=http://schema.org/VisualArtwork>Everything is (un)true</a>,
