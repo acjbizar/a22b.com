@@ -12,6 +12,7 @@
     <link rel="shortcut icon" href=https://alexanderchristiaanjacob.com/favicon.ico>
     <link rel=search href=https://acjs.net/search/>
     <link rel=shortlink href=http://a22b.com/>
+    <link rel="stylesheet" href="https://hetcdn.nl/fonts/unst.css">
     <meta name=apple-mobile-web-app-capable content=yes>
     <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
     <meta name=apple-mobile-web-app-title content=ACJ>
@@ -128,6 +129,25 @@
             -o-font-feature-settings:"liga" 1, "dlig" 1, "clig" 1, "onum" 1;
             -webkit-font-feature-settings:"liga" 1, "dlig" 1, "clig" 1, "onum" 1;
             font-feature-settings:"liga" 1, "dlig" 1, "clig" 1, "onum" 1;
+        }
+
+        #art a {
+            font-family: var(--font--unst);
+            font-style: normal;
+            font-variation-settings: "wght" 400, "hght" 100;
+            transition: font-variation-settings 200ms ease;
+        }
+
+        #art a:hover {
+            font-variation-settings: "wght" 400, "hght" 400;
+            margin-top: 0;
+            padding-bottom: 0;
+            top: 0;
+        }
+
+        #art a abbr {
+            font-variant: normal;
+            text-transform: uppercase;
         }
 
     </style>
