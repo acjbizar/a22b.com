@@ -40,6 +40,18 @@
     <style>
         *{border:0;color:inherit;margin:0;outline:0;padding:0;text-decoration:none}
 
+        :root {
+            --shadow-base-x: 1px;
+            --shadow-base-y: 0.25em;
+
+            --shadow-dx: 0px;
+            --shadow-dy: 0px;
+            --shadow-blur: 4px;
+            --shadow-opacity: 0.5;
+
+            text-rendering:optimizeLegibility;
+        }
+
         a{color:#fff}
         p>abbr{
             -moz-font-feature-settings:"smcp" 1;
@@ -65,9 +77,16 @@
         a abbr{font-variant:small-caps;letter-spacing:.0625em}
         p a{font-style:italic;position:relative;text-shadow:1px 1px 1px rgba(0,0,0,.5);top:0}
 
-        a[href="https://deidee.com/"],a[href="https://deidee.nl/"]{margin-right:-.125em;word-spacing:-.125em}
+        p a {
+            text-shadow:
+                    calc(var(--shadow-base-x) + var(--shadow-dx))
+                    calc(var(--shadow-base-y) + var(--shadow-dy))
+                    var(--shadow-blur)
+                    rgb(0 0 0 / var(--shadow-opacity));
+            will-change: text-shadow;
+        }
 
-        :root{text-rendering:optimizeLegibility}
+        a[href="https://deidee.com/"],a[href="https://deidee.nl/"]{margin-right:-.125em;word-spacing:-.125em}
 
         :not(p)+p,p:first-child{text-indent:0}
         /*h1::before{content:'❧'}*/
@@ -240,5 +259,252 @@
         or find more of my things at <a href=https://acjs.net/ itemprop=owns itemscope itemtype=http://schema.org/WebSite translate=no><abbr itemprop=alternateName>ACJ</abbr>’s</a>.
         ∎</p>
 </main>
+<button id="enableTiltShadow" type="button" hidden>
+    Enable motion shadow
+</button>
+<script>
+    (() => {
+        const root = document.documentElement;
+        const button = document.getElementById('enableTiltShadow');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        if (reduceMotion.matches) {
+            return;
+        }
+
+        const MAX_X = 14;         // horizontal movement
+        const MAX_Y_SWAY = 4;     // small vertical counter-sway
+        const DROP_NEAR = 1.5;    // upright: shadow close to text
+        const DROP_FAR = 18;      // flat: shadow farther away
+        const BLUR_NEAR = 2;      // upright: sharper
+        const BLUR_FAR = 12;      // flat: blurrier
+        const OPACITY_NEAR = 0.58;// upright: darker
+        const OPACITY_FAR = 0.20; // flat: lighter
+
+        const RESPONSE = 0.14;
+        const DEAD_ZONE = 1.5;
+
+        let currentX = 0;
+        let currentY = 0;
+        let currentBlur = 4;
+        let currentOpacity = 0.5;
+
+        let targetX = 0;
+        let targetY = 0;
+        let targetBlur = 4;
+        let targetOpacity = 0.5;
+
+        let raf = null;
+        let usingSensors = false;
+        let pointerFallbackAttached = false;
+
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+        const lerp = (a, b, t) => a + (b - a) * t;
+
+        function startRendering() {
+            if (!raf) {
+                raf = requestAnimationFrame(render);
+            }
+        }
+
+        function render() {
+            currentX += (targetX - currentX) * RESPONSE;
+            currentY += (targetY - currentY) * RESPONSE;
+            currentBlur += (targetBlur - currentBlur) * RESPONSE;
+            currentOpacity += (targetOpacity - currentOpacity) * RESPONSE;
+
+            root.style.setProperty('--shadow-dx', `${currentX.toFixed(2)}px`);
+            root.style.setProperty('--shadow-dy', `${currentY.toFixed(2)}px`);
+            root.style.setProperty('--shadow-blur', `${currentBlur.toFixed(2)}px`);
+            root.style.setProperty('--shadow-opacity', currentOpacity.toFixed(3));
+
+            raf = requestAnimationFrame(render);
+        }
+
+        function setTargets({ dx, dy, blur, opacity }) {
+            targetX = dx;
+            targetY = dy;
+            targetBlur = blur;
+            targetOpacity = opacity;
+            startRendering();
+        }
+
+        function getScreenAngle() {
+            if (screen.orientation && typeof screen.orientation.angle === 'number') {
+                return screen.orientation.angle;
+            }
+
+            if (typeof window.orientation === 'number') {
+                return window.orientation;
+            }
+
+            return 0;
+        }
+
+        function applyDeadZone(value) {
+            return Math.abs(value) < DEAD_ZONE ? 0 : value;
+        }
+
+        function remapTiltDegrees(beta, gamma) {
+            const angle = ((getScreenAngle() % 360) + 360) % 360;
+
+            let x = gamma;
+            let y = beta;
+
+            switch (angle) {
+                case 90:
+                    x = -beta;
+                    y = gamma;
+                    break;
+                case 180:
+                    x = -gamma;
+                    y = -beta;
+                    break;
+                case 270:
+                    x = beta;
+                    y = -gamma;
+                    break;
+            }
+
+            return {
+                xDeg: applyDeadZone(x),
+                yDeg: applyDeadZone(y)
+            };
+        }
+
+        function computeShadowFromTilt(beta, gamma) {
+            const { xDeg, yDeg } = remapTiltDegrees(beta, gamma);
+
+            const xNorm = clamp(xDeg / 35, -1, 1);
+            const yNorm = clamp(yDeg / 35, -1, 1);
+
+            // Flatness:
+            // 0 = upright-ish -> shadow close, sharp, dark
+            // 1 = flatter     -> shadow far, soft, light
+            const flatness = 1 - clamp(Math.abs(yDeg) / 90, 0, 1);
+
+            const baseDrop = lerp(DROP_NEAR, DROP_FAR, flatness);
+            const verticalSway = -yNorm * MAX_Y_SWAY;
+
+            return {
+                dx: -xNorm * MAX_X,
+                dy: baseDrop + verticalSway,
+                blur: lerp(BLUR_NEAR, BLUR_FAR, flatness),
+                opacity: lerp(OPACITY_NEAR, OPACITY_FAR, flatness)
+            };
+        }
+
+        function computeShadowFromPointer(clientX, clientY) {
+            const nx = (clientX / window.innerWidth) * 2 - 1;
+            const ny = (clientY / window.innerHeight) * 2 - 1;
+
+            // Pointer acts like the light source.
+            // Shadow moves away from it.
+            const distance = clamp(Math.hypot(nx, ny) / 1.414, 0, 1);
+
+            return {
+                dx: -nx * MAX_X,
+                dy: (-ny * MAX_Y_SWAY) + lerp(DROP_NEAR, DROP_FAR, distance * 0.8),
+                blur: lerp(BLUR_NEAR, BLUR_FAR, distance),
+                opacity: lerp(OPACITY_NEAR, OPACITY_FAR, distance)
+            };
+        }
+
+        function onOrientation(event) {
+            if (event.beta == null || event.gamma == null) {
+                return;
+            }
+
+            usingSensors = true;
+            setTargets(computeShadowFromTilt(event.beta, event.gamma));
+
+            if (button) {
+                button.hidden = true;
+            }
+        }
+
+        function onPointerMove(event) {
+            if (usingSensors) {
+                return;
+            }
+
+            setTargets(computeShadowFromPointer(event.clientX, event.clientY));
+        }
+
+        function attachPointerFallback() {
+            if (pointerFallbackAttached) {
+                return;
+            }
+
+            pointerFallbackAttached = true;
+            window.addEventListener('pointermove', onPointerMove, { passive: true });
+
+            setTargets(
+                computeShadowFromPointer(window.innerWidth / 2, window.innerHeight / 2)
+            );
+
+            if (button) {
+                button.hidden = true;
+            }
+        }
+
+        function attachSensors() {
+            window.addEventListener('deviceorientation', onOrientation, { passive: true });
+
+            if (screen.orientation && screen.orientation.addEventListener) {
+                screen.orientation.addEventListener('change', () => {
+                    targetX = 0;
+                    targetY = DROP_NEAR;
+                });
+            }
+
+            // If the API exists but never delivers data, fall back.
+            setTimeout(() => {
+                if (!usingSensors) {
+                    attachPointerFallback();
+                }
+            }, 1200);
+        }
+
+        async function enableMotionShadow() {
+            try {
+                if (
+                    typeof DeviceOrientationEvent !== 'undefined' &&
+                    typeof DeviceOrientationEvent.requestPermission === 'function'
+                ) {
+                    const result = await DeviceOrientationEvent.requestPermission();
+
+                    if (result !== 'granted') {
+                        attachPointerFallback();
+                        return;
+                    }
+                }
+
+                attachSensors();
+            } catch (error) {
+                console.error('Motion shadow could not be enabled:', error);
+                attachPointerFallback();
+            }
+        }
+
+        const hasDeviceOrientation = 'DeviceOrientationEvent' in window;
+        const needsPermission =
+            hasDeviceOrientation &&
+            typeof DeviceOrientationEvent.requestPermission === 'function';
+
+        if (needsPermission) {
+            if (button) {
+                button.hidden = false;
+                button.addEventListener('click', enableMotionShadow);
+            } else {
+                attachPointerFallback();
+            }
+        } else if (hasDeviceOrientation) {
+            attachSensors();
+        } else {
+            attachPointerFallback();
+        }
+    })();
+</script>
 </body>
 </html>
