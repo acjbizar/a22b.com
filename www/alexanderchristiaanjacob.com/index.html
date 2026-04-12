@@ -41,13 +41,10 @@
         *{border:0;color:inherit;margin:0;outline:0;padding:0;text-decoration:none}
 
         :root {
-            --shadow-base-x: 1px;
-            --shadow-base-y: 0.25em;
-
-            --shadow-dx: 0px;
-            --shadow-dy: 0px;
-            --shadow-blur: 4px;
-            --shadow-opacity: 0.5;
+            --cast-x: 0px;
+            --cast-y: 0px;
+            --cast-blur: 2px;
+            --cast-opacity: 0.28;
 
             text-rendering:optimizeLegibility;
         }
@@ -75,14 +72,12 @@
         strong{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif,serif;font-variant:small-caps;letter-spacing:.0625em;text-rendering:optimizeSpeed;text-transform:lowercase}
 
         a abbr{font-variant:small-caps;letter-spacing:.0625em}
-        p a{font-style:italic;position:relative;text-shadow:1px 1px 1px rgba(0,0,0,.5);top:0}
+        p a{font-style:italic;position:relative;top:0}
 
         p a {
             text-shadow:
-                    calc(var(--shadow-base-x) + var(--shadow-dx))
-                    calc(var(--shadow-base-y) + var(--shadow-dy))
-                    var(--shadow-blur)
-                    rgb(0 0 0 / var(--shadow-opacity));
+                    0 1px 2px rgba(0, 0, 0, 0.5),
+                    var(--cast-x) var(--cast-y) var(--cast-blur) rgb(0 0 0 / var(--cast-opacity));
             will-change: text-shadow;
         }
 
@@ -218,7 +213,7 @@
         <a href=https://mimesia.church/ itemprop=owns itemscope itemtype=http://schema.org/PlaceOfWorship translate=no>Mimesia Church</a>, <i>et al</i>),
         <a href=https://neoaestheticism.com/ itemprop=owns itemscope itemtype=http://schema.org/WebSite translate=no>Neo-æstheticism</a>,
         <a href=https://netplasticism.com/ itemprop=owns itemscope itemtype=http://schema.org/WebSite translate=no>Netplasticism</a>,
-        <a href="https://onwijsheden.nl/" itemprop=owns itemscope itemtype=http://schema.org/WebSite lang=nl translate=no>Onwijsheden</a>
+        <a href="https://onwijsheden.nl/" itemprop=owns itemscope itemtype=http://schema.org/WebSite lang=nl translate=no>Onwijsheden</a>,
         <a href=https://onzinnen.nl/ itemprop=owns itemscope itemtype=http://schema.org/ComicSeries lang=nl translate=no>Onzinnen</a> (e-<abbr>issn</abbr> 2667-0356),
         <a href=https://periodicsystem.org/ itemprop=owns itemscope itemtype=http://schema.org/WebSite>Periodic System of the Elements</a>,
         <a href="https://www.instagram.com/promptocrat/" itemscope itemtype="http://schema.org/ProfilePage">The Promptocrat</a>,
@@ -272,34 +267,45 @@
             return;
         }
 
-        const MAX_X = 14;         // horizontal movement
-        const MAX_Y_SWAY = 4;     // small vertical counter-sway
-        const DROP_NEAR = 1.5;    // upright: shadow close to text
-        const DROP_FAR = 18;      // flat: shadow farther away
-        const BLUR_NEAR = 2;      // upright: sharper
-        const BLUR_FAR = 12;      // flat: blurrier
-        const OPACITY_NEAR = 0.58;// upright: darker
-        const OPACITY_FAR = 0.20; // flat: lighter
+        const CAST_LEN_DESKTOP = 18;
 
-        const RESPONSE = 0.14;
-        const DEAD_ZONE = 1.5;
+        // Mobile tuning
+        const MOBILE_X_GAIN = 24;
+        const MOBILE_Y_GAIN = 28;
+        const MOBILE_X_DIVISOR = 8;
+        const MOBILE_Y_DIVISOR = 7;
+
+        const BLUR_MIN = 2;
+        const BLUR_MAX = 11;
+
+        const OPACITY_MIN = 0.18;
+        const OPACITY_MAX = 0.42;
+
+        const RESPONSE = 0.16;
+        const DEAD_ZONE = 0.8;
 
         let currentX = 0;
         let currentY = 0;
-        let currentBlur = 4;
-        let currentOpacity = 0.5;
+        let currentBlur = BLUR_MIN;
+        let currentOpacity = OPACITY_MIN;
 
         let targetX = 0;
         let targetY = 0;
-        let targetBlur = 4;
-        let targetOpacity = 0.5;
+        let targetBlur = BLUR_MIN;
+        let targetOpacity = OPACITY_MIN;
 
         let raf = null;
         let usingSensors = false;
         let pointerFallbackAttached = false;
 
+        // Calibrated neutral pose for mobile
+        let zeroXDeg = null;
+        let zeroYDeg = null;
+
         const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
         const lerp = (a, b, t) => a + (b - a) * t;
+        const signedPow = (value, power) =>
+            Math.sign(value) * Math.pow(Math.abs(value), power);
 
         function startRendering() {
             if (!raf) {
@@ -313,10 +319,10 @@
             currentBlur += (targetBlur - currentBlur) * RESPONSE;
             currentOpacity += (targetOpacity - currentOpacity) * RESPONSE;
 
-            root.style.setProperty('--shadow-dx', `${currentX.toFixed(2)}px`);
-            root.style.setProperty('--shadow-dy', `${currentY.toFixed(2)}px`);
-            root.style.setProperty('--shadow-blur', `${currentBlur.toFixed(2)}px`);
-            root.style.setProperty('--shadow-opacity', currentOpacity.toFixed(3));
+            root.style.setProperty('--cast-x', `${currentX.toFixed(2)}px`);
+            root.style.setProperty('--cast-y', `${currentY.toFixed(2)}px`);
+            root.style.setProperty('--cast-blur', `${currentBlur.toFixed(2)}px`);
+            root.style.setProperty('--cast-opacity', currentOpacity.toFixed(3));
 
             raf = requestAnimationFrame(render);
         }
@@ -366,47 +372,67 @@
                     break;
             }
 
-            return {
-                xDeg: applyDeadZone(x),
-                yDeg: applyDeadZone(y)
-            };
+            return { xDeg: x, yDeg: y };
         }
 
-        function computeShadowFromTilt(beta, gamma) {
+        function resetNeutralPose() {
+            zeroXDeg = null;
+            zeroYDeg = null;
+        }
+
+        function computeCastFromTilt(beta, gamma) {
             const { xDeg, yDeg } = remapTiltDegrees(beta, gamma);
 
-            const xNorm = clamp(xDeg / 35, -1, 1);
-            const yNorm = clamp(yDeg / 35, -1, 1);
+            if (zeroXDeg === null || zeroYDeg === null) {
+                zeroXDeg = xDeg;
+                zeroYDeg = yDeg;
+            }
 
-            // Flatness:
-            // 0 = upright-ish -> shadow close, sharp, dark
-            // 1 = flatter     -> shadow far, soft, light
-            const flatness = 1 - clamp(Math.abs(yDeg) / 90, 0, 1);
+            // Delta from the pose the user started in.
+            let dxDeg = xDeg - zeroXDeg;
+            let dyDeg = yDeg - zeroYDeg;
 
-            const baseDrop = lerp(DROP_NEAR, DROP_FAR, flatness);
-            const verticalSway = -yNorm * MAX_Y_SWAY;
+            dxDeg = applyDeadZone(dxDeg);
+            dyDeg = applyDeadZone(dyDeg);
+
+            // Strong, responsive axis mapping.
+            let xNorm = clamp(dxDeg / MOBILE_X_DIVISOR, -1, 1);
+            let yNorm = clamp(dyDeg / MOBILE_Y_DIVISOR, -1, 1);
+
+            // Make small movements visible sooner, but keep direction.
+            xNorm = signedPow(xNorm, 0.85);
+            yNorm = signedPow(yNorm, 0.85);
+
+            // Reversed relative to mouse, as you wanted.
+            const dx = xNorm * MOBILE_X_GAIN;
+            const dy = yNorm * MOBILE_Y_GAIN;
+
+            // React realism to actual displacement, not abstract magnitude.
+            const displacement = clamp(
+                Math.max(Math.abs(dx) / MOBILE_X_GAIN, Math.abs(dy) / MOBILE_Y_GAIN),
+                0,
+                1
+            );
 
             return {
-                dx: -xNorm * MAX_X,
-                dy: baseDrop + verticalSway,
-                blur: lerp(BLUR_NEAR, BLUR_FAR, flatness),
-                opacity: lerp(OPACITY_NEAR, OPACITY_FAR, flatness)
+                dx,
+                dy,
+                blur: lerp(BLUR_MIN, BLUR_MAX, displacement),
+                opacity: lerp(OPACITY_MIN, OPACITY_MAX, displacement)
             };
         }
 
-        function computeShadowFromPointer(clientX, clientY) {
+        function computeCastFromPointer(clientX, clientY) {
             const nx = (clientX / window.innerWidth) * 2 - 1;
             const ny = (clientY / window.innerHeight) * 2 - 1;
 
-            // Pointer acts like the light source.
-            // Shadow moves away from it.
             const distance = clamp(Math.hypot(nx, ny) / 1.414, 0, 1);
 
             return {
-                dx: -nx * MAX_X,
-                dy: (-ny * MAX_Y_SWAY) + lerp(DROP_NEAR, DROP_FAR, distance * 0.8),
-                blur: lerp(BLUR_NEAR, BLUR_FAR, distance),
-                opacity: lerp(OPACITY_NEAR, OPACITY_FAR, distance)
+                dx: -nx * CAST_LEN_DESKTOP,
+                dy: -ny * CAST_LEN_DESKTOP,
+                blur: lerp(BLUR_MIN, BLUR_MAX, distance),
+                opacity: lerp(0.18, 0.34, distance)
             };
         }
 
@@ -416,7 +442,7 @@
             }
 
             usingSensors = true;
-            setTargets(computeShadowFromTilt(event.beta, event.gamma));
+            setTargets(computeCastFromTilt(event.beta, event.gamma));
 
             if (button) {
                 button.hidden = true;
@@ -428,7 +454,7 @@
                 return;
             }
 
-            setTargets(computeShadowFromPointer(event.clientX, event.clientY));
+            setTargets(computeCastFromPointer(event.clientX, event.clientY));
         }
 
         function attachPointerFallback() {
@@ -439,9 +465,12 @@
             pointerFallbackAttached = true;
             window.addEventListener('pointermove', onPointerMove, { passive: true });
 
-            setTargets(
-                computeShadowFromPointer(window.innerWidth / 2, window.innerHeight / 2)
-            );
+            setTargets({
+                dx: 0,
+                dy: 0,
+                blur: BLUR_MIN,
+                opacity: OPACITY_MIN
+            });
 
             if (button) {
                 button.hidden = true;
@@ -453,12 +482,23 @@
 
             if (screen.orientation && screen.orientation.addEventListener) {
                 screen.orientation.addEventListener('change', () => {
-                    targetX = 0;
-                    targetY = DROP_NEAR;
+                    resetNeutralPose();
+                    setTargets({
+                        dx: 0,
+                        dy: 0,
+                        blur: BLUR_MIN,
+                        opacity: OPACITY_MIN
+                    });
                 });
             }
 
-            // If the API exists but never delivers data, fall back.
+            // Recalibrate when the page becomes visible again.
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    resetNeutralPose();
+                }
+            });
+
             setTimeout(() => {
                 if (!usingSensors) {
                     attachPointerFallback();
@@ -473,7 +513,6 @@
                     typeof DeviceOrientationEvent.requestPermission === 'function'
                 ) {
                     const result = await DeviceOrientationEvent.requestPermission();
-
                     if (result !== 'granted') {
                         attachPointerFallback();
                         return;
@@ -504,6 +543,9 @@
         } else {
             attachPointerFallback();
         }
+
+        // Optional: expose recalibration for a button if you ever want one.
+        window.recalibrateTextShadow = resetNeutralPose;
     })();
 </script>
 </body>
